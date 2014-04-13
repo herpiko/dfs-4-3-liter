@@ -196,7 +196,7 @@ $sudahpernah[0]['y']=$y;
 		$aturan=0;
 	}
 
-	echo "<div style=\"font-family:monospace\"><strong>Deeeeeeeeeepth first search yooo! \m/ </strong><br><br>";
+	echo "<div style=\"font-family:monospace\"><strong>Deeeeeeeeeepth-of-my-heart first search</strong><br><br>";
 	echo "<div style=\"background-color:#FDF5CF;padding:10px;width:70px\">target :<br>";
 	echo "x = ".$x_target."<br>";
 	echo "y = ".$y_target."<br></div>";
@@ -412,6 +412,9 @@ $sudahpernah[0]['y']=$y;
 							$x=$at[$i]['x'];
 							$y=$at[$i]['y'];
 							$sudah=1;
+							$tabelsolusiindex++;
+							$tabelsolusi[$tabelsolusiindex]['nilai']="(".$x.",".$y.")";
+							$tabelsolusi[$tabelsolusiindex]['aturan']=$at[$i]['aturan'];
 
 							// }
 					} 			
@@ -453,6 +456,9 @@ $sudahpernah[0]['y']=$y;
 			for ($i=0; $i < 50 ; $i++) {
 				if ($level<0) {
 					$buntutotal=1;
+					$tabelsolusiindex++;
+					$tabelsolusi[$tabelsolusiindex]['nilai']="Buntu";
+					$tabelsolusi[$tabelsolusiindex]['aturan']="Naik ke level 0";
 					break;
 
 			}
@@ -463,7 +469,7 @@ $sudahpernah[0]['y']=$y;
 				if (empty($levelvalue[$level]['nilai'][0]['x'])) {
 					echo "<br>Tidak ada solusi lain di level ".($level+1);
 					$level--;
-					$langkah++;
+					// $langkah++;
 					echo "<br>Naikkan lagi ke level ".($level+1)."<br>";
 					// print_r($levelvalue[$level]);
 				}
@@ -511,6 +517,9 @@ $sudahpernah[0]['y']=$y;
 					$sudahpernah[$jumlah_sudahpernah]['y']=$levelvalue[$level]['nilai'][0]['y'];
 					if ($yanglain==0) {
 						echo "<br>Pilihan alternatif di level ".($level+1)." : ".$x.",".$y;
+						$tabelsolusiindex++;
+							$tabelsolusi[$tabelsolusiindex]['nilai']="(".$x.",".$y.")";
+							$tabelsolusi[$tabelsolusiindex]['aturan']="naik ke level ".($level+1);
 					}
 
 					
@@ -539,7 +548,7 @@ $sudahpernah[0]['y']=$y;
 					echo "<br>Pilihan alternatif di level ".($level+1)." : ".$x.",".$y;
 					
 					$level--;
-					$langkah++;
+					// $langkah++;
 					
 				} else {
 					#do nothing
@@ -561,9 +570,10 @@ $sudahpernah[0]['y']=$y;
 		//jika solusi ditemukan, beri garis biru
 		if ($x==$x_target) {
 			if ($y==$y_target) {
-				echo "<br><strong style=\"color:blue\">solusi ditemukan yey!</strong><br>";
+				echo "<br><br><strong style=\"color:blue\">solusi ditemukan yey!</strong><br>";
 				echo "<hr style=\"color:blue\">";
 				$limit=$level;
+				$ketemu=1;
 
 				// hentikan program jika solusi ketemu
 				//break;
@@ -580,5 +590,43 @@ $sudahpernah[0]['y']=$y;
 
 	
 	}
+// echo "<br><pre>";
+// print_r($tabelsolusi);
+// echo "</pre>";
+
+echo "<table>";
+echo "<tr>";
+echo "<td><strong>Langkah</strong></td>";
+echo "<td><strong>Kondisi</strong></td>";
+echo "<td><strong>Aturan</strong></td>";
+echo "</tr></strong>";
+echo "<br>";
+echo "<br>";
+$langkahindex=1;
+foreach ($tabelsolusi as $key) {
+	echo "<tr>";
+	echo "<td>".$langkahindex."</td>";
+	echo "<td>".$key['nilai']."</td>";
+	echo "<td>".$key['aturan']."</td>";
+	echo "</tr>";
+	$langkahindex++;
+}
+echo "</table>";
+if ($ketemu!=1) {
+	echo "<div style=\"background-color:red;color:white;padding:5px\">Solusi tidak ditemukan<br>";
+	echo "<script type=\"text/javascript\">";
+ 	echo "function gagal(){";
+   	echo "alert('Ruang keadaan (".$x_target.",".$y_target.") tidak dapat ditemukan');";
+	echo "}";
+ 	echo "gagal();";
+	echo "</script>";
+ } else {
+ 	echo "<script type=\"text/javascript\">";
+ 	echo "function gagal(){";
+   	echo "alert('Ruang keadaan (".$x_target.",".$y_target.") berhasil ditemukan');";
+	echo "}";
+ 	echo "gagal();";
+	echo "</script>";
+ }
 echo "<br>[ endofhack ]";
 
